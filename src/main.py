@@ -3,6 +3,8 @@ import pitchReader, processing, beats_per_minute2
 import generated_vlc as vlc
 import time
 from multiprocessing import Process
+import lights
+
 
 
 def playSong():
@@ -46,6 +48,13 @@ def rhythmManager():
         #control lighting
 
 if __name__ == "__main__":
+    x_channel_list = [3,5,7,8,10,11,12,13]
+    y_channel_list = [15,16,18,22]
+    lights.setupLEDs(x_channel_list, y_channel_list)
+
+    grid = [[True, False, True, True],[True, False, True, False],[True, False, False, True],[True,True,True, True]]*2
+    while(True):
+        lights.updateLEDs(grid, x_channel_list, y_channel_list)
 
     p1 = Process(target = playSong, args=())
     p2 = Process(target= printArray, args=())
@@ -55,3 +64,4 @@ if __name__ == "__main__":
 
     p1.join()
     p2.join()
+
