@@ -1,17 +1,45 @@
-import sys
-import pitchReader, processing
-import generated_vlc as vlc
-import time
+#! /usr/bin/env python
 
-instance = vlc.Instance()
+import alsaaudio
+import numpy as np
+import aubio
 
-player = instance.media_player_new()
+# constants
+samplerate = 44100
+win_s = 2048
+hop_s = win_s // 2
+framesize = hop_s
 
-player.audio_set_volume(1) # set to 1 for now because im getting bored of piano music
+# set up audio input
+recorder = alsaaudio.PCM(type=alsaaudio.PCM_CAPTURE)
+recorder.setperiodsize(framesize)
+recorder.setrate(samplerate)
+recorder.setformat(alsaaudio.PCM_FORMAT_FLOAT_LE)
+recorder.setchannels(1)
 
-media = instance.media_new('test.wav')
+# create aubio pitch detection (first argument is method, "default" is
+# "yinfft", can also be "yin", "mcomb", fcomb", "schmitt").
+pitcher = aubio.pitch("default", win_s, hop_s, samplerate)
+# set output unit (can be 'midi', 'cent', 'Hz', ...)
+pitcher.set_unit("Hz")
+# ignore frames under this level (dB)
+pitcher.set_silence(-40)
 
-player.set_media(media)
+print("Starting to listen, press Ctrl+C to stop")
 
-player.play()
-time.sleep(1)
+# main loop
+while True:
+    try:
+        # read data from audio input
+        _, data = recorder.read()
+        # convert data to aubio float samples
+        samples = np.fromstring(data, np.float32)
+        # iptch of current frame
+        freq = pitcher(samples)[0]
+        # compute energy of current block
+        energy = np.sum(samples**2)/len(samples)
+        # do something with the results
+        print("{:10.4f} {:10.4f}".format(freq,energy))
+    except KeyboardInterrupt:
+        print("Ctrl+C pressed, exiting")
+        break

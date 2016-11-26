@@ -13,7 +13,7 @@ def playSong():
 
     player.audio_set_volume(50) # set to 1 for now because im getting bored of piano music
 
-    media = instance.media_new('test.wav')
+    media = instance.media_new(sys.argv[1])
 
     player.set_media(media)
 
@@ -27,7 +27,7 @@ def printArray():
 
     format_window = processing.Format(8, 100)
 
-    processor = processing.WaveProcess(44100, .001, format_window)
+    processor = processing.WaveProcess(44100, .01, format_window)
 
     for i in reader:
 
