@@ -7,7 +7,7 @@ import math
 
 
 class WaveProcess(object):
-    def __init__(self, sample_rate: int, window_period: float, grid_length: int, normalization: float):
+    def __init__(self, sample_rate: int, window_period: float, format: Format):
         """
         :param sample_rate: the sample rate of the audio file (in Hz)
         :param window_period: the width of the window (i.e. the time in seconds over which the average will be taken)
@@ -39,16 +39,10 @@ class WaveProcess(object):
         the largest number of samples which fit into the window with the given sample rate
         """
 
-        self._grid_length = grid_length  # type: int
+        self._format = format
         """
-        :type: int
-        the length of the side of the LED grid
-        """
-
-        self._normalization = normalization  # type: float
-        """
-        :type:
-        the value beyond which all LEDs will be ON
+        :type: Format
+        the way in which the grid will be drawn
         """
 
     def update(self, now: float) -> None:
@@ -62,27 +56,22 @@ class WaveProcess(object):
         if len(window) > self._window_samples:
             window.pop(0)
 
-    def get_rms(self) -> float:
-        """
-        :return: the rms value over the whole window.
-        """
-        window = self._window
-        if len(window) == 0:
-            return 0
-        else:
-            window_squared = [x**2 for x in window]
-            rms = math.sqrt(sum(window_squared)/len(window_squared))
-            return rms
+    def get_square(self):
+        return self._format.draw(self._window)
 
-    def get_square(self) -> List[List[bool]]:
-        """
-        generates the LED square, with the on square centred and sized proportional to the average of the window
 
-        :return: a 2D array containing the on/off states for each of the LEDs
-        """
-        rms = self.get_rms()
+class Format(object):
+    def __init__(self, grid_length, normalization):
+        self._normalization = normalization
+        self._grid_length = grid_length
+
+    def _get_mean(self, window: List[float]) -> float:
+        return sum(window) / len(window)
+
+    def draw(self, window: List[float]) -> List[List[bool]]:
+        m = self._get_mean(window)
         grid_length = self._grid_length
-        frac = grid_length * rms / self._normalization
+        frac = grid_length * m / self._normalization
 
         def generate():
             for r in range(grid_length):
@@ -93,3 +82,30 @@ class WaveProcess(object):
 
         return [[v for v in r] for r in generate()]
 
+class FormatLine(Format):
+    def __init__(self, grid_length, normalization, period: int = 15):
+        super().__init__(grid_length, normalization)
+        self._updates = 0  # type: int
+        self._period = period  # type: int
+
+    def draw(self, window: List[float]) -> List[List[float]]:
+        self._updates += 1
+        m = self._get_mean(window)
+        grid_length = self._grid_length
+        frac = grid_length * m / self._normalization
+
+        def generate():
+            a = 2*math.pi*self._updates/self._period
+            x = [round(v/2 * math.cos(a)) for v in range(-frac, frac)]
+            y = [round(v/2 * math.sin(a)) for v in range(-frac, frac)]
+            for r in range(grid_length):
+                r = r*2 - grid_length
+                r /= 2
+                r = int(r)
+                for c in range(grid_length):
+                    c = c*2 - grid_length
+                    c /= 2
+                    c = int(c)
+                    yield r in x and c in y
+
+        return [[v for v in r] for r in generate()]
