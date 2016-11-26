@@ -3,9 +3,6 @@
 from aubio import source, tempo
 from numpy import median, diff
 
-#can access bpms2 array from any file, bpm changes throughout audio file
-bpms2 = []
-
 def get_file_bpm(path, params = None):
     """ Calculate the beats per minute (bpm) of a given file.
         path: path to the file
@@ -54,26 +51,14 @@ def get_file_bpm(path, params = None):
         bpms = 60./diff(beats)
         for element in bpms:
             print element
-            bpms2.append(bpms)
         b = median(bpms)
     else:
         b = 0
         print("not enough beats found in {:s}".format(path))
     return b
 
-def controlLightArray(lightArray):
-    for element in lightArray:
-        element = False
-        ##change other variables (i.e. brightness or colour)
-
-    #reset
-    for element in lightArray:
-        element = True
-
 if __name__ == '__main__':
     import sys
     for f in sys.argv[1:]:
         bpm = get_file_bpm(f)
-        for element in bpms2:
-            print element
         print("{:6s} {:s}".format("{:2f}".format(bpm), f))
