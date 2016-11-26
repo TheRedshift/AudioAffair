@@ -2,12 +2,11 @@
 Author: Ben Thompson
 Date: 2016-11-26
 """
-from typing import *
+from __future__ import division
 import math
 
-
 class WaveProcess(object):
-    def __init__(self, sample_rate: int, window_period: float, format: Format):
+    def __init__(self, sample_rate, window_period, format):
         """
         :param sample_rate: the sample rate of the audio file (in Hz)
         :param window_period: the width of the window (i.e. the time in seconds over which the average will be taken)
@@ -17,35 +16,30 @@ class WaveProcess(object):
 
         self._sample_rate = sample_rate
         """
-        :type: int
         the sample rate of the audio file (in Hz)
         """
 
-        self._window_period = window_period  # type: float
+        self._window_period = window_period
         """
-        :type: float
         the width of the window (i.e. the time in seconds over which the average will be taken)
         """
 
-        self._window = []  # type: List[float]
+        self._window = []
         """
-        :type: List[float]
         stored values for the length of the window
         """
 
-        self._window_samples = int(sample_rate * window_period)  # type: int
+        self._window_samples = int(sample_rate * window_period)
         """
-        :type: int
         the largest number of samples which fit into the window with the given sample rate
         """
 
         self._format = format
         """
-        :type: Format
         the way in which the grid will be drawn
         """
 
-    def update(self, now: float) -> None:
+    def update(self, now):
         """
         updates the window contents to include a new value
         :param now: the new/current state to passed into the window. If the window is full the oldest value will be removed
@@ -65,10 +59,10 @@ class Format(object):
         self._normalization = normalization
         self._grid_length = grid_length
 
-    def _get_mean(self, window: List[float]) -> float:
+    def _get_mean(self, window):
         return sum(window) / len(window)
 
-    def draw(self, window: List[float]) -> List[List[bool]]:
+    def draw(self, window):
         m = self._get_mean(window)
         grid_length = self._grid_length
         frac = grid_length * m / self._normalization
@@ -82,13 +76,14 @@ class Format(object):
 
         return [[v for v in r] for r in generate()]
 
-class FormatLine(Format):
-    def __init__(self, grid_length, normalization, period: int = 15):
-        super().__init__(grid_length, normalization)
-        self._updates = 0  # type: int
-        self._period = period  # type: int
 
-    def draw(self, window: List[float]) -> List[List[float]]:
+class FormatLine(Format):
+    def __init__(self, grid_length, normalization, period=15):
+        super(FormatLine, self).__init__(grid_length, normalization)
+        self._updates = 0
+        self._period = period
+
+    def draw(self, window):
         self._updates += 1
         m = self._get_mean(window)
         grid_length = self._grid_length
@@ -109,3 +104,8 @@ class FormatLine(Format):
                     yield r in x and c in y
 
         return [[v for v in r] for r in generate()]
+
+
+class FormatPulse(Format):
+    def draw(self, window):
+        pass
