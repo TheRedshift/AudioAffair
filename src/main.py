@@ -1,6 +1,9 @@
 import sys
-import pitchReader
+import pitchReader#processing
 
 if __name__ == "__main__":
 
-    pitchReader.pitchreader(sys.argv[1], sys.argv[2])
+    reader = pitchReader.pitchreader(sys.argv[1], sys.argv[2])
+
+    for i in reader:
+        print i

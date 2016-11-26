@@ -1,8 +1,7 @@
 #! /usr/bin/env python
 
-from sys import exit
 
-def pitchreader (filename, sameplerate):
+def pitchreader (filename, samplerate):
 
     from aubio import source, pitch
 
@@ -11,7 +10,7 @@ def pitchreader (filename, sameplerate):
     win_s = 4096 // downsample
     hop_s = 512 // downsample
 
-    s = source('test.wav', sameplerate, hop_s)
+    s = source(filename, int(samplerate), hop_s)
     samplerate = s.samplerate
 
     tolerance = 0.8
@@ -30,10 +29,11 @@ def pitchreader (filename, sameplerate):
         pitch = pitch_o(samples)[0]
         # pitch = int(round(pitch))
         confidence = pitch_o.get_confidence()
-        print("%f %f" % (totalFrames / float(samplerate), pitch))
+        currentFrame = totalFrames / float(samplerate)
+        yield currentFrame, pitch
         pitches += [pitch]
         confidences += [confidence]
         totalFrames += read
         if read < hop_s: break
 
-pitchreader('a', 44100)
+#pitchreader('a', 44100)
