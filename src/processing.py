@@ -60,7 +60,7 @@ class Format(object):
         self._grid_length = grid_length
 
     def _get_mean(self, window):
-        return sum(window) / len(window)
+        return sum(window) / len(window) if len(window) > 0 else 0
 
     def draw(self, window):
         m = self._get_mean(window)
@@ -107,5 +107,8 @@ class FormatLine(Format):
 
 
 class FormatPulse(Format):
+    def __init__(self, grid_length, normalization):
+        super(FormatPulse, self).__init__(grid_length, normalization)
+        self._pulses = []
     def draw(self, window):
-        pass
+
