@@ -30,7 +30,7 @@ def pitchreader (filename, samplerate):
         # pitch = int(round(pitch))
         confidence = pitch_o.get_confidence()
         currentFrame = totalFrames / float(samplerate)
-        yield currentFrame, pitch
+        yield pitch #can add back current frame if necessary
         pitches += [pitch]
         confidences += [confidence]
         totalFrames += read

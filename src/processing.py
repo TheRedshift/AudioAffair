@@ -65,14 +65,15 @@ class Format(object):
     def draw(self, window):
         m = self._get_mean(window)
         grid_length = self._grid_length
-        frac = grid_length * m / self._normalization
+        low = min(window) if len(window) > 0 else 0
+        frac = grid_length * (m - low) / (self._normalization - low)
 
         def generate():
             for a in range(grid_length):
-                a = a*2 - grid_length
-                yield [abs(a) < frac and abs(b*2 - grid_length) < frac for b in range(grid_length)]
-
-        return [[v for v in r] for r in generate()]
+                a = a*2 - grid_length + 1
+                yield [abs(a) < frac and abs(b*2 - grid_length + 1) < frac for b in range(grid_length)]
+        ret = [[v for v in r] for r in generate()]
+        return ret
 
 
 class FormatLine(Format):
@@ -104,5 +105,6 @@ class FormatPulse(Format):
     def __init__(self, grid_length, normalization):
         super(FormatPulse, self).__init__(grid_length, normalization)
         self._pulses = []
+
     def draw(self, window):
         pass
