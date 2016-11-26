@@ -68,11 +68,9 @@ class Format(object):
         frac = grid_length * m / self._normalization
 
         def generate():
-            for r in range(grid_length):
-                r = r*2 - grid_length
-                for c in range(grid_length):
-                    c = c*2 - grid_length
-                    yield abs(r) < frac and abs(c) < frac
+            for a in range(grid_length):
+                a = a*2 - grid_length
+                yield [abs(a) < frac and abs(b*2 - grid_length) < frac for b in range(grid_length)]
 
         return [[v for v in r] for r in generate()]
 
@@ -93,15 +91,11 @@ class FormatLine(Format):
             a = 2*math.pi*self._updates/self._period
             x = [round(v/2 * math.cos(a)) for v in range(-frac, frac)]
             y = [round(v/2 * math.sin(a)) for v in range(-frac, frac)]
-            for r in range(grid_length):
-                r = r*2 - grid_length
-                r /= 2
-                r = int(r)
-                for c in range(grid_length):
-                    c = c*2 - grid_length
-                    c /= 2
-                    c = int(c)
-                    yield r in x and c in y
+            for a in range(grid_length):
+                a = a*2 - grid_length
+                a /= 2
+                a = int(a)
+                yield [a in x and int((b*2 - grid_length)/2) in y for b in range(grid_length)]
 
         return [[v for v in r] for r in generate()]
 
