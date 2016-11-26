@@ -49,6 +49,8 @@ def get_file_bpm(path, params = None):
         if len(beats) < 4:
             print("few beats found in {:s}".format(path))
         bpms = 60./diff(beats)
+        for element in bpms:
+            print element
         b = median(bpms)
     else:
         b = 0
