@@ -1,5 +1,5 @@
 import sys
-import pitchReader, processing
+import pitchReader, processing, beats_per_minute2
 import generated_vlc as vlc
 import time
 from multiprocessing import Process
@@ -38,6 +38,12 @@ def printArray():
         print "\n"
         processor.update(i)
 
+def rhythmManager():
+    bpm = get_file_bpm(sys.argv[1])
+    print("{:6s} {:s}".format("{:2f}".format(bpm), f))
+    for element in bpms2:
+        print element
+        #control lighting
 
 if __name__ == "__main__":
 
