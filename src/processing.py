@@ -111,4 +111,4 @@ class FormatPulse(Format):
         super(FormatPulse, self).__init__(grid_length, normalization)
         self._pulses = []
     def draw(self, window):
-
+        pass
