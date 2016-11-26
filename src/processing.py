@@ -60,13 +60,14 @@ class Format(object):
         self._grid_length = grid_length
 
     def _get_mean(self, window):
-        return sum(window) / len(window) if len(window) > 0 else 0
+        return math.sqrt(sum([x**2 for x in window]) / len(window)) if len(window) > 0 else 0
 
     def draw(self, window):
         m = self._get_mean(window)
         grid_length = self._grid_length
-        low = min(window)
-        frac = grid_length * (m - low) / (self._normalization - low)
+        low = min(window) if len(window) > 0 else 0
+        high = max(window) if len(window) > 0 else 0
+        frac = grid_length * (m - low) / (high - low) if (low != high) else (grid_length/2)
 
         def generate():
             for a in range(grid_length):
