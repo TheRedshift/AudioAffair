@@ -1,44 +1,39 @@
 #! /usr/bin/env python
 
-import sys
-from aubio import source, pitch
+from sys import exit
 
-if len(sys.argv) < 2:
-    print("Usage: %s <filename> [samplerate]" % sys.argv[0])
-    sys.exit(1)
+def pitchreader (filename, sameplerate):
 
-filename = sys.argv[1]
+    from aubio import source, pitch
 
-downsample = 1
-samplerate = 441 // downsample
-if len( sys.argv ) > 2: samplerate = int(sys.argv[2])
+    downsample = 1
 
-win_s = 4096 // downsample # fft size
-hop_s = 512  // downsample # hop size
+    win_s = 4096 // downsample
+    hop_s = 512 // downsample
 
-s = source(filename, samplerate, hop_s)
-samplerate = s.samplerate
+    s = source('test.wav', sameplerate, hop_s)
+    samplerate = s.samplerate
 
-tolerance = 0.8
+    tolerance = 0.8
 
-pitch_o = pitch("yin", win_s, hop_s, samplerate)
-pitch_o.set_unit("midi")
-pitch_o.set_tolerance(tolerance)
+    pitch_o = pitch("yin", win_s, hop_s, samplerate)
+    pitch_o.set_unit("midi")
+    pitch_o.set_tolerance(tolerance)
 
-pitches = []
-confidences = []
+    pitches = []
+    confidences = []
 
-# total number of frames read
-total_frames = 0
-while True:
-    samples, read = s()
-    pitch = pitch_o(samples)[0]
-    #pitch = int(round(pitch))
-    confidence = pitch_o.get_confidence()
-    print("%f %f" % (total_frames / float(samplerate), pitch))
-    pitches += [pitch]
-    confidences += [confidence]
-    total_frames += read
-    if read < hop_s: break
+    totalFrames = 0
 
-if 0: sys.exit(0)
+    while True:
+        samples, read = s()
+        pitch = pitch_o(samples)[0]
+        # pitch = int(round(pitch))
+        confidence = pitch_o.get_confidence()
+        print("%f %f" % (totalFrames / float(samplerate), pitch))
+        pitches += [pitch]
+        confidences += [confidence]
+        totalFrames += read
+        if read < hop_s: break
+
+pitchreader('a', 44100)
