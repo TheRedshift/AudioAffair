@@ -65,7 +65,7 @@ class Format(object):
     def draw(self, window):
         m = self._get_mean(window)
         grid_length = self._grid_length
-        low = min(window) if len(window) > 0 else 0
+        low = min(window)/2 if len(window) > 0 else 0
         frac = grid_length * (m - low) / (self._normalization - low)
 
         def generate():

@@ -7,7 +7,7 @@ if __name__ == "__main__":
 
     format_window = processing.Format(8, 100)
 
-    processor = processing.WaveProcess(44100, .2, format_window)
+    processor = processing.WaveProcess(44100, .001, format_window)
 
     for i in reader:
 
