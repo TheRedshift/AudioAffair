@@ -48,8 +48,8 @@ def rhythmManager():
         #control lighting
 
 if __name__ == "__main__":
-    x_channel_list = [3,5,7,8,10,11,12,13]
-    y_channel_list = [15,16,18,22]
+    x_channel_list = [3,5,7,8,10,11,12,13]      #x = 8 high for on
+    y_channel_list = [15,16,18,22]              #y = 4 low for on
     lights.setupLEDs(x_channel_list, y_channel_list)
 
     grid = [[True, False, True, True],[True, False, True, False],[True, False, False, True],[True,True,True, True]]*2
