@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     grid = [[True, False, True, True],[True, False, True, False],[True, False, False, True],[True,True,True, True]]*2
     while(True):
-        lights.updateLEDs(grid, x_channel_list, y_channel_list, True, 0.0001)
+        lights.updateLEDs(grid, x_channel_list, y_channel_list)
 
     p1 = Process(target = playSong, args=())
     p2 = Process(target= printArray, args=())
