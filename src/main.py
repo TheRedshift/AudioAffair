@@ -2,9 +2,13 @@ import sys
 import pitchReader, processing, beats_per_minute2
 import generated_vlc as vlc
 import time
-import math.floor
+import math
 from multiprocessing import Process
 import lights
+
+
+x_channel_list = [3,5,7,8,10,11,12,13]
+y_channel_list = [15,16,18,22,26,19,21,23]
 
 def playSong():
 
@@ -33,10 +37,10 @@ def printArray():
     for i in reader:
 
         myarray = processor.get_square()
-        print '\n'.join([str(x) for x in myarray])
+        lights.updateLEDs(myarray, x_channel_list, y_channel_list)
         #time.sleep(0.1)
         #print chr(27) + "[2J"
-        print "\n"
+        #print "\n"
         processor.update(i)
 
 def rhythmManager(grid):
@@ -44,20 +48,7 @@ def rhythmManager(grid):
     controlLightArray(grid)
 
 if __name__ == "__main__":
-    x_channel_list = [3,5,7,8,10,11,12,13]
-    y_channel_list = [15,16,18,22,26,19,21,23]
     lights.setupLEDs(x_channel_list, y_channel_list)
-
-    grid = [[True,False,True,False,True,False,True,False]]*8
-
-    grid2 = [[False,True,False,True,False,True,False,True]]*8
-    #grid = [[True, False, True, True, False, True, False, True],[True, False, True, False, True, False, True, True],[True, False, False, True, True, True, True],[True,True,True, True, False, False, Fasle, False]]*2
-    while(True):
-        if(math.floor(time.clock) % 2 == 0):
-            lights.updateLEDs(grid, x_channel_list, y_channel_list)
-        else:
-            lights.updateLEDs(grid2, x_channel_list, y_channel_list)
-
 
     p1 = Process(target = playSong, args=())
     p2 = Process(target= printArray, args=())
