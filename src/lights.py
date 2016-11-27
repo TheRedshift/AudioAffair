@@ -1,5 +1,6 @@
 __author__ = 'david'
 import RPi.GPIO as GPIO
+import time
 
 def updateLEDs(grid, x, y, sleepVal, period):
     x_channel_list = x
