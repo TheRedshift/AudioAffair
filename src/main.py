@@ -8,7 +8,7 @@ from multiprocessing import Process
 
 
 x_channel_list = [3,5,7,8,10,11,12,13]
-y_channel_list = [15,16,18,22,26,19,21,23]
+y_channel_list = [15,16,24,22,26,19,21,23]
 
 def playSong():
 
@@ -23,14 +23,14 @@ def playSong():
     player.set_media(media)
 
     player.play()
-    time.sleep(10)
+    #time.sleep(10)
 
 
 def printArray():
 
     reader = pitchReader.pitchreader(sys.argv[1], sys.argv[2])
 
-    format_window = processing.FormatLine(6, 70)
+    format_window = processing.FormatLine(5, 70)
 
     processor = processing.WaveProcess(44100, .01, format_window)
 
@@ -38,7 +38,8 @@ def printArray():
 
         myarray = processor.get_square()
         #lights.updateLEDs(myarray, x_channel_list, y_channel_list)
-        time.sleep(0.1)
+        print '\n'.join([str(r) for r in myarray])
+        time.sleep(1)
         print chr(27) + "[2J"
         print "\n"
         processor.update(i)

@@ -87,19 +87,19 @@ class FormatLine(Format):
         self._updates += 1
         m = self._get_mean(window)
         grid_length = self._grid_length
-        frac = grid_length * m / self._normalization
+        frac = int(grid_length * m / self._normalization)
 
         def generate():
             a = 2*math.pi*self._updates/self._period
             x = [round(v/2 * math.cos(a)) for v in range(-frac, frac)]
             y = [round(v/2 * math.sin(a)) for v in range(-frac, frac)]
             for a in range(grid_length):
-                a = a*2 - grid_length
-                a /= 2
-                a = int(a)
-                yield [a in x and int((b*2 - grid_length)/2) in y for b in range(grid_length)]
+                a = a*2 - grid_length + 1
+                # a /= 2
+                # a = round(a)
+                yield [a in x and (b*2 - grid_length + 1) in y for b in range(grid_length)]
 
-        return [r for r in generate()]
+        return [[v for v in r] for r in generate()]
 
 
 # TODO later
