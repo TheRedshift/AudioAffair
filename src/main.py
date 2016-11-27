@@ -47,7 +47,7 @@ if __name__ == "__main__":
     y_channel_list = [15,16,18,22,26,19,21,23]
     lights.setupLEDs(x_channel_list, y_channel_list)
 
-    grid = [[True, False, True, True],[True, False, True, False],[True, False, False, True],[True,True,True, True]]*2
+    grid = [[True, False, True, True],[True, False, True, False],[True, False, False, True],[True,True,True, True]]*4
     while(True):
         lights.updateLEDs(grid, x_channel_list, y_channel_list)
 
