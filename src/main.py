@@ -2,7 +2,7 @@ import sys
 import pitchReader, processing, beats_per_minute2
 import generated_vlc as vlc
 import time
-import math.floor
+import math
 from multiprocessing import Process
 import lights
 
@@ -53,7 +53,9 @@ if __name__ == "__main__":
     grid2 = [[False,True,False,True,False,True,False,True]]*8
     #grid = [[True, False, True, True, False, True, False, True],[True, False, True, False, True, False, True, True],[True, False, False, True, True, True, True],[True,True,True, True, False, False, Fasle, False]]*2
     while(True):
-        if(math.floor(time.clock) % 2 == 0):
+	temp = math.floor(time.clock())
+	temp = temp % 2
+        if(temp == 0):
             lights.updateLEDs(grid, x_channel_list, y_channel_list)
         else:
             lights.updateLEDs(grid2, x_channel_list, y_channel_list)
