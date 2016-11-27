@@ -69,17 +69,18 @@ def controlLightArray(lightArray):
     lights.updateLEDs(grid, x_channel_list, y_channel_list)
 
     for element in bpms2:
-        flashLEDs(grid, x_channel_list, y_channel_list, element)
+        duration = 1
+        flashLEDs(grid, x_channel_list, y_channel_list, element, duration)
 
-def flashLEDs(grid, x, y, beatsPerMinute):
+def flashLEDs(grid, x, y, beatsPerMinute, duration):
     if(beatsPerMinute > 130):
-        lights.directFlashLED(grid, x, y, 0.1)
+        lights.directFlashLED(grid, x, y, 0.1, duration)
     elif(beatsPerMinute <= 130 and beatsPerMinute > 110):
-        lights.directFlashLED(grid, x, y, 0.3)
+        lights.directFlashLED(grid, x, y, 0.3, duration)
     elif(beatsPerMinute <= 110 and beatsPerMinute > 90):
-        lights.directFlashLED(grid, x, y, 0.5)
+        lights.directFlashLED(grid, x, y, 0.5, duration)
     else:
-        lights.directFlashLED(grid, x, y, 0.7)
+        lights.directFlashLED(grid, x, y, 0.7, duration)
 
 if __name__ == '__main__':
     import sys

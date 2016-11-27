@@ -51,6 +51,9 @@ if __name__ == "__main__":
     while(True):
         lights.updateLEDs(grid, x_channel_list, y_channel_list, True, 0.0001)
 
+    #run light control threads concurrently and synchronise to times
+    rhythmManager(grid)
+
     p1 = Process(target = playSong, args=())
     p2 = Process(target= printArray, args=())
 
