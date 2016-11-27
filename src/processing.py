@@ -99,13 +99,14 @@ class FormatLine(Format):
                 a = int(a)
                 yield [a in x and int((b*2 - grid_length)/2) in y for b in range(grid_length)]
 
-        return [[v for v in r] for r in generate()]
+        return [r for r in generate()]
 
 
-class FormatPulse(Format):
-    def __init__(self, grid_length, normalization):
-        super(FormatPulse, self).__init__(grid_length, normalization)
-        self._pulses = []
-
-    def draw(self, window):
-        pass
+# TODO later
+# class FormatPulse(Format):
+#     def __init__(self, grid_length, normalization):
+#         super(FormatPulse, self).__init__(grid_length, normalization)
+#         self._pulses = []
+#
+#     def draw(self, window):
+#         pass
