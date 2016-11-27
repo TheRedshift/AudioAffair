@@ -11,9 +11,11 @@ def updateLEDs(grid, x, y, sleepVal, period):
             GPIO.output(x_channel_list[numx], GPIO.LOW)
             if (y):
                 GPIO.output(y_channel_list[numy], GPIO.HIGH)
+                GPIO.output(y_channel_list[numy], GPIO.LOW)
             if(sleepVal):
                 time.sleep(float(period))
             GPIO.output(y_channel_list[numy], GPIO.HIGH)
+            GPIO.output(x_channel_list[numx], GPIO.LOW)
             numy += 1
         numy =0
         numx +=1
