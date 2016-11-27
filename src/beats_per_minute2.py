@@ -62,13 +62,24 @@ def get_file_bpm(path, params = None):
     return b
 
 def controlLightArray(lightArray):
-    for element in lightArray:
-        element = False
-        ##change other variables (i.e. brightness or colour)
 
-    #reset
-    for element in lightArray:
-        element = True
+    x_channel_list = [3, 5, 7, 8, 10, 11, 12, 13]
+    y_channel_list = [15, 16, 18, 22]
+
+    lights.updateLEDs(grid, x_channel_list, y_channel_list)
+
+    for element in bpms2:
+        flashLEDs(grid, x_channel_list, y_channel_list, element)
+
+def flashLEDs(grid, x, y, beatsPerMinute):
+    if(beatsPerMinute > 130):
+        lights.directFlashLED(grid, x, y, 0.1)
+    elif(beatsPerMinute <= 130 and beatsPerMinute > 110):
+        lights.directFlashLED(grid, x, y, 0.3)
+    elif(beatsPerMinute <= 110 and beatsPerMinute > 90):
+        lights.directFlashLED(grid, x, y, 0.5)
+    else:
+        lights.directFlashLED(grid, x, y, 0.7)
 
 if __name__ == '__main__':
     import sys
