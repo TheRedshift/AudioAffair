@@ -18,7 +18,7 @@ def playSong():
     player.set_media(media)
 
     player.play()
-    time.sleep(10)
+    time.sleep(10) #Defines the number of seconds the music will play for
 
 
 def printArray():
@@ -37,23 +37,33 @@ def printArray():
         processor.update(i)
 
 
+'''
 def rhythmManager():
     bpm = get_file_bpm(sys.argv[1])
     print("{:6s} {:s}".format("{:2f}".format(bpm), f))
     for element in bpms2:
         print element
         # control lighting
-
+'''
 
 if __name__ == "__main__":
+
+
+
     x_channel_list = [3, 5, 7, 8, 10, 11, 12, 13]  # x = 8 high for on
     y_channel_list = [15, 16, 18, 22]  # y = 4 low for on
     lights.setupLEDs(x_channel_list, y_channel_list)
 
+
+
     grid = [[True, False, True, True], [True, False, True, False], [True, False, False, True],
             [True, True, True, True]] * 2
+
+
     while (True):
         lights.updateLEDs(grid, x_channel_list, y_channel_list)
+
+
 
     p1 = Process(target=playSong, args=())
     p2 = Process(target=printArray, args=())
