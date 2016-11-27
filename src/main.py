@@ -44,7 +44,7 @@ def rhythmManager(grid):
 
 if __name__ == "__main__":
     x_channel_list = [3,5,7,8,10,11,12,13]
-    y_channel_list = [15,16,18,22]
+    y_channel_list = [15,16,18,22,26,19,21,23]
     lights.setupLEDs(x_channel_list, y_channel_list)
 
     grid = [[True, False, True, True],[True, False, True, False],[True, False, False, True],[True,True,True, True]]*2
