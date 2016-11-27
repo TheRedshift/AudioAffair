@@ -74,7 +74,7 @@ class Format(object):
         frac = (sum(whalf)/len(whalf)) / (sum(window)/len(window)) / 2 if len(whalf) > 0 else 0.5
         # frac = grid_length * sum(v) / self._normalization if len(window) > 0 else (grid_length/2)
         frac *= grid_length
-        frac
+        # frac
         def generate():
             for a in range(grid_length):
                 a = a*2 - grid_length + 1
