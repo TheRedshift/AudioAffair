@@ -6,14 +6,12 @@ from multiprocessing import Process
 import lights
 
 
-
 def playSong():
-
     instance = vlc.Instance()
 
     player = instance.media_player_new()
 
-    player.audio_set_volume(50) # set to 1 for now because im getting bored of piano music
+    player.audio_set_volume(50)  # set to 1 for now because im getting bored of piano music
 
     media = instance.media_new(sys.argv[1])
 
@@ -24,7 +22,6 @@ def playSong():
 
 
 def printArray():
-
     reader = pitchReader.pitchreader(sys.argv[1], sys.argv[2])
 
     format_window = processing.Format(8, 100)
@@ -32,36 +29,37 @@ def printArray():
     processor = processing.WaveProcess(44100, .01, format_window)
 
     for i in reader:
-
         myarray = processor.get_square()
         print '\n'.join([str(x) for x in myarray])
-        #time.sleep(0.1)
-        #print chr(27) + "[2J"
+        # time.sleep(0.1)
+        # print chr(27) + "[2J"
         print "\n"
         processor.update(i)
+
 
 def rhythmManager():
     bpm = get_file_bpm(sys.argv[1])
     print("{:6s} {:s}".format("{:2f}".format(bpm), f))
     for element in bpms2:
         print element
-        #control lighting
+        # control lighting
+
 
 if __name__ == "__main__":
-    x_channel_list = [3,5,7,8,10,11,12,13]      #x = 8 high for on
-    y_channel_list = [15,16,18,22]              #y = 4 low for on
+    x_channel_list = [3, 5, 7, 8, 10, 11, 12, 13]  # x = 8 high for on
+    y_channel_list = [15, 16, 18, 22]  # y = 4 low for on
     lights.setupLEDs(x_channel_list, y_channel_list)
 
-    grid = [[True, False, True, True],[True, False, True, False],[True, False, False, True],[True,True,True, True]]*2
-    while(True):
+    grid = [[True, False, True, True], [True, False, True, False], [True, False, False, True],
+            [True, True, True, True]] * 2
+    while (True):
         lights.updateLEDs(grid, x_channel_list, y_channel_list)
 
-    p1 = Process(target = playSong, args=())
-    p2 = Process(target= printArray, args=())
+    p1 = Process(target=playSong, args=())
+    p2 = Process(target=printArray, args=())
 
     p1.start()
     p2.start()
 
     p1.join()
     p2.join()
-
