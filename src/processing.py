@@ -60,20 +60,21 @@ class Format(object):
         self._grid_length = grid_length
 
     def _get_mean(self, window):
-        return sum(window) / len(window) if len(window) > 0 else 0
+        return math.sqrt(sum([x**2 for x in window]) / len(window)) if len(window) > 0 else 0
 
     def draw(self, window):
         m = self._get_mean(window)
         grid_length = self._grid_length
-        low = min(window)/2 if len(window) > 0 else 0
-        frac = grid_length * (m - low) / (self._normalization - low)
+        low = min(window) if len(window) > 0 else 0
+        high = max(window) if len(window) > 0 else 0
+        frac = grid_length * (m - low) / (high - low) if (low != high) else (grid_length/2)
 
         def generate():
             for a in range(grid_length):
                 a = a*2 - grid_length + 1
                 yield [abs(a) < frac and abs(b*2 - grid_length + 1) < frac for b in range(grid_length)]
-        ret = [[v for v in r] for r in generate()]
-        return ret
+
+        return [[v for v in r] for r in generate()]
 
 
 class FormatLine(Format):
@@ -86,25 +87,26 @@ class FormatLine(Format):
         self._updates += 1
         m = self._get_mean(window)
         grid_length = self._grid_length
-        frac = grid_length * m / self._normalization
+        frac = int(grid_length * m / self._normalization)
 
         def generate():
             a = 2*math.pi*self._updates/self._period
             x = [round(v/2 * math.cos(a)) for v in range(-frac, frac)]
             y = [round(v/2 * math.sin(a)) for v in range(-frac, frac)]
             for a in range(grid_length):
-                a = a*2 - grid_length
-                a /= 2
-                a = int(a)
-                yield [a in x and int((b*2 - grid_length)/2) in y for b in range(grid_length)]
+                a = a*2 - grid_length + 1
+                # a /= 2
+                # a = round(a)
+                yield [a in x and (b*2 - grid_length + 1) in y for b in range(grid_length)]
 
         return [[v for v in r] for r in generate()]
 
 
-class FormatPulse(Format):
-    def __init__(self, grid_length, normalization):
-        super(FormatPulse, self).__init__(grid_length, normalization)
-        self._pulses = []
-
-    def draw(self, window):
-        pass
+# TODO later
+# class FormatPulse(Format):
+#     def __init__(self, grid_length, normalization):
+#         super(FormatPulse, self).__init__(grid_length, normalization)
+#         self._pulses = []
+#
+#     def draw(self, window):
+#         pass

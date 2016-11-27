@@ -2,8 +2,13 @@ import sys
 import pitchReader, processing, beats_per_minute2
 import generated_vlc as vlc
 import time
+import math
 from multiprocessing import Process
-import lights
+#import lights
+
+
+x_channel_list = [3,5,7,8,10,11,12,13]
+y_channel_list = [15,16,24,22,26,19,21,23]
 
 def playSong():
 
@@ -18,38 +23,33 @@ def playSong():
     player.set_media(media)
 
     player.play()
-    time.sleep(10)
+    #time.sleep(10)
 
 
 def printArray():
 
     reader = pitchReader.pitchreader(sys.argv[1], sys.argv[2])
 
-    format_window = processing.Format(8, 100)
+    format_window = processing.FormatLine(5, 70)
 
     processor = processing.WaveProcess(44100, .01, format_window)
 
     for i in reader:
 
         myarray = processor.get_square()
-        print '\n'.join([str(x) for x in myarray])
-        #time.sleep(0.1)
-        #print chr(27) + "[2J"
+        #lights.updateLEDs(myarray, x_channel_list, y_channel_list)
+        print '\n'.join([str(r) for r in myarray])
+        time.sleep(1)
+        print chr(27) + "[2J"
         print "\n"
         processor.update(i)
 
-def rhythmManager(grid):
-    bpm = get_file_bpm(sys.argv[1])
-    controlLightArray(grid)
+#def rhythmManager(grid):
+#    bpm = get_file_bpm(sys.argv[1])
+#    controlLightArray(grid)
 
 if __name__ == "__main__":
-    x_channel_list = [3,5,7,8,10,11,12,13]
-    y_channel_list = [15,16,18,22,26,19,21,23]
-    lights.setupLEDs(x_channel_list, y_channel_list)
-
-    grid = [[True, False, True, True],[True, False, True, False],[True, False, False, True],[True,True,True, True]]*2
-    while(True):
-        lights.updateLEDs(grid, x_channel_list, y_channel_list, True, 0.0001)
+    #lights.setupLEDs(x_channel_list, y_channel_list)
 
     #run light control threads concurrently and synchronise to times
     rhythmManager(grid)
