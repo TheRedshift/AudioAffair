@@ -4,7 +4,7 @@ import generated_vlc as vlc
 import time
 import math
 from multiprocessing import Process
-import lights
+#import lights
 
 
 x_channel_list = [3,5,7,8,10,11,12,13]
@@ -30,25 +30,25 @@ def printArray():
 
     reader = pitchReader.pitchreader(sys.argv[1], sys.argv[2])
 
-    format_window = processing.Format(8, 100)
+    format_window = processing.FormatLine(6, 70)
 
     processor = processing.WaveProcess(44100, .01, format_window)
 
     for i in reader:
 
         myarray = processor.get_square()
-        lights.updateLEDs(myarray, x_channel_list, y_channel_list)
-        #time.sleep(0.1)
-        #print chr(27) + "[2J"
-        #print "\n"
+        #lights.updateLEDs(myarray, x_channel_list, y_channel_list)
+        time.sleep(0.1)
+        print chr(27) + "[2J"
+        print "\n"
         processor.update(i)
 
-def rhythmManager(grid):
-    bpm = get_file_bpm(sys.argv[1])
-    controlLightArray(grid)
+#def rhythmManager(grid):
+#    bpm = get_file_bpm(sys.argv[1])
+#    controlLightArray(grid)
 
 if __name__ == "__main__":
-    lights.setupLEDs(x_channel_list, y_channel_list)
+    #lights.setupLEDs(x_channel_list, y_channel_list)
 
     p1 = Process(target = playSong, args=())
     p2 = Process(target= printArray, args=())
