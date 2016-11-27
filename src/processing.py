@@ -67,11 +67,14 @@ class Format(object):
         grid_length = self._grid_length
         # low = min(window) if len(window) > 0 else 0
         # high = max(window) if len(window) > 0 else 0
-        w = zip(window, [r**2 for r in range(len(window))])
-        v = [x*f/sum(w) for (x, f) in w]
-
-        frac = grid_length * sum(v) / self._normalization if len(window) > 0 else (grid_length/2)
-
+        inds = [1 + r**2 for r in range(len(window))]
+        w = zip(window, inds)
+        # v = [x*f/sum(inds) for (x, f) in w]
+        whalf = window[(len(window)//2):]
+        frac = (sum(whalf)/len(whalf)) / (sum(window)/len(window)) / 2 if len(whalf) > 0 else 0.5
+        # frac = grid_length * sum(v) / self._normalization if len(window) > 0 else (grid_length/2)
+        frac *= grid_length
+        frac
         def generate():
             for a in range(grid_length):
                 a = a*2 - grid_length + 1
@@ -90,7 +93,7 @@ class FormatLine(Format):
         self._updates += 1
         m = self._get_mean(window)
         grid_length = self._grid_length
-        frac = grid_length * m / self._normalization
+        frac = grid_length * (m - min(window)) / (self._normalization - min(window))
 
         def generate():
             a = 2*math.pi*self._updates/self._period
