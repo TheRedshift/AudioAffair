@@ -36,4 +36,4 @@ def pitchreader (filename, samplerate):
         totalFrames += read
         if read < hop_s: break
 
-#pitchreader('a', 44100)
+
