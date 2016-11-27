@@ -1,7 +1,7 @@
 __author__ = 'david'
 import RPi.GPIO as GPIO
 
-def updateLEDs(grid, x, y, sleep, period):
+def updateLEDs(grid, x, y, sleepVal, period):
     x_channel_list = x
     y_channel_list = y
     numx = numy = 0
@@ -10,7 +10,7 @@ def updateLEDs(grid, x, y, sleep, period):
             GPIO.output(x_channel_list[numx], GPIO.LOW)
             if (y):
                 GPIO.output(y_channel_list[numy], GPIO.HIGH)
-            if(sleep):
+            if(sleepVal):
                 sleep(float(period))
             GPIO.output(y_channel_list[numy], GPIO.HIGH)
             numy += 1
